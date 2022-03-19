@@ -1,10 +1,9 @@
 module Api 
-    module v1 
+    module V1 
         class AirlinesController < ApplicationController
             def index
                 airlines = Airline.all
-            #    // airlines = Airline.AirlinesController
-            
+        
                 render json: AirlineSerializer.new(airlines, options).serialized_json
             end
 
@@ -40,7 +39,7 @@ module Api
 
 
             def destroy 
-                airline = Airline.find_by(slug: params:[:slug])
+                airline = Airline.find_by(slug: params[:slug])
                 
                 if airline.destroy
                     head :no_content        
@@ -53,16 +52,18 @@ module Api
 
             private
 
+            def options
+                @options ||= { include: %i[reviews] }
+            end
+        
+
             def airline_params
                 params.require(:airline).permit(:name, :image_url)
             end
 
-            def options
-                @options ||= { include: %i[reviews]}
-            end
+
 
 
         end
     end
-end
 end
